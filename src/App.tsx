@@ -1,16 +1,16 @@
 import type { Product } from '@/types/product';
-import ProductCard from './components/ProductCard';
+import ProductCard from '@/components/ProductCard';
 import { useState } from 'react';
 
 const products: Product[] = [
-  { id: 1, name: 'Laptop', price: 1200 },
-  { id: 2, name: 'Smartphone', price: 800 },
-  { id: 3, name: 'Headphones', price: 150 },
-  { id: 4, name: 'Keyboard', price: 75 },
-  { id: 5, name: 'Mouse', price: 40 },
-  { id: 6, name: 'Monitor', price: 300 },
-  { id: 7, name: 'Tablet', price: 600 },
-  { id: 8, name: 'Smartwatch', price: 250 },
+  { id: 1, name: 'Laptop', price: 1200, liked: false },
+  { id: 2, name: 'Smartphone', price: 800, liked: false },
+  { id: 3, name: 'Headphones', price: 150, liked: false },
+  { id: 4, name: 'Keyboard', price: 75, liked: false },
+  { id: 5, name: 'Mouse', price: 40, liked: false },
+  { id: 6, name: 'Monitor', price: 300, liked: false },
+  { id: 7, name: 'Tablet', price: 600, liked: false },
+  { id: 8, name: 'Smartwatch', price: 250, liked: false },
 ];
 function App() {
   const [search, setSearch] = useState('');
