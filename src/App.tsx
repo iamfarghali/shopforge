@@ -47,8 +47,8 @@ function App() {
 
       {/* Products */}
       <div className="grid grid-cols-4 gap-4">
-        {sortedProducts.map((p, index) => (
-          <ProductCard key={index} product={p} />
+        {sortedProducts.map((p) => (
+          <ProductCard key={p.id} product={p} />
         ))}
       </div>
     </div>
