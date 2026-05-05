@@ -1,41 +1,36 @@
-import type { Product } from '@/types/product';
+import { useEffect, useState } from 'react';
 import ProductCard from '@/components/ProductCard';
-import { useState } from 'react';
+import SearchBar from '@/components/SearchBar';
+import type { Product } from '@/types/product';
+import { searchProducts } from './services/searchProducts';
 
-const products: Product[] = [
-  { id: 1, name: 'Laptop', price: 1200, liked: false },
-  { id: 2, name: 'Smartphone', price: 800, liked: false },
-  { id: 3, name: 'Headphones', price: 150, liked: false },
-  { id: 4, name: 'Keyboard', price: 75, liked: false },
-  { id: 5, name: 'Mouse', price: 40, liked: false },
-  { id: 6, name: 'Monitor', price: 300, liked: false },
-  { id: 7, name: 'Tablet', price: 600, liked: false },
-  { id: 8, name: 'Smartwatch', price: 250, liked: false },
-];
 function App() {
-  const [search, setSearch] = useState('');
+  const [results, setResults] = useState<Product[] | []>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [ascending, setAscending] = useState(true);
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      console.log('Searching for:', searchTerm);
+      const data = await searchProducts(searchTerm);
+      console.log('Result for:', searchTerm);
+      setResults(data);
+      setLoading(false);
+    }
+    fetchData();
+  }, [searchTerm]);
 
-  const sortedProducts = [...filteredProducts].sort((a, b) =>
+  const sortedProducts = [...results].sort((a, b) =>
     ascending ? a.price - b.price : b.price - a.price
   );
 
   return (
     <div className="container h-screen mx-auto px-10 pt-12 bg-gray-50">
-      {/* Search */}
       <div className="mb-4 flex items-center justify-between gap-1">
-        <input
-          type="text"
-          name="product_name"
-          value={search}
-          className="border w-1/2 px-2"
-          placeholder="Search..."
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        {/* Search */}
+        <SearchBar onSearch={setSearchTerm} />
 
         <button
           className="bg-gray-800 text-gray-50 px-3"
@@ -47,9 +42,9 @@ function App() {
 
       {/* Products */}
       <div className="grid grid-cols-4 gap-4">
-        {sortedProducts.map((p) => (
-          <ProductCard key={p.id} product={p} />
-        ))}
+        {loading
+          ? 'Loading...'
+          : sortedProducts.map((p) => <ProductCard key={p.id} product={p} />)}
       </div>
     </div>
   );
