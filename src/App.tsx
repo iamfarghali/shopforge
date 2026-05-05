@@ -14,29 +14,41 @@ const products: Product[] = [
 ];
 function App() {
   const [search, setSearch] = useState('');
+  const [ascending, setAscending] = useState(true);
 
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  const sortedProducts = [...filteredProducts].sort((a, b) =>
+    ascending ? a.price - b.price : b.price - a.price
+  );
+
   return (
     <div className="container h-screen mx-auto px-10 pt-12 bg-gray-50">
       {/* Search */}
-      <div className="border mb-4">
+      <div className="mb-4 flex items-center justify-between gap-1">
         <input
           type="text"
           name="product_name"
           value={search}
-          className="w-full px-2"
+          className="border w-1/2 px-2"
           placeholder="Search..."
           onChange={(e) => setSearch(e.target.value)}
         />
+
+        <button
+          className="bg-gray-800 text-gray-50 px-3"
+          onClick={() => setAscending((prev) => !prev)}
+        >
+          Sort
+        </button>
       </div>
 
       {/* Products */}
       <div className="grid grid-cols-4 gap-4">
-        {filteredProducts.map((p) => (
-          <ProductCard product={p} />
+        {sortedProducts.map((p, index) => (
+          <ProductCard key={index} product={p} />
         ))}
       </div>
     </div>
