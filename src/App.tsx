@@ -11,15 +11,31 @@ function App() {
   const [ascending, setAscending] = useState(true);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function fetchData() {
-      setLoading(true);
-      console.log('Searching for:', searchTerm);
-      const data = await searchProducts(searchTerm);
-      console.log('Result for:', searchTerm);
-      setResults(data);
-      setLoading(false);
+      try {
+        setLoading(true);
+
+        console.log('Searching for:', searchTerm);
+
+        const data = await searchProducts(searchTerm, controller.signal);
+
+        console.log('Result for:', searchTerm);
+
+        setResults(data);
+      } catch (err) {
+        if (err instanceof DOMException && err.name == 'AbortError') return;
+        console.log(err);
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
     }
     fetchData();
+
+    return () => controller.abort();
   }, [searchTerm]);
 
   const sortedProducts = [...results].sort((a, b) =>

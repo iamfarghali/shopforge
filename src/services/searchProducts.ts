@@ -1,13 +1,31 @@
 import products from '@/data/products';
+import type { Product } from '@/types/product';
 
-export async function searchProducts(query: string) {
-  await new Promise((resolve) => {
-    setTimeout(resolve, Math.random() * 1500);
+type SearchProducts = (
+  query: string,
+  signal?: AbortSignal
+) => Promise<Product[]>;
+
+export const searchProducts: SearchProducts = (
+  query: string,
+  signal?: AbortSignal
+) => {
+  return new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      const filteredProducts =
+        query !== ''
+          ? products.filter((product) =>
+              product.name.toLowerCase().includes(query.toLowerCase())
+            )
+          : products;
+      resolve(filteredProducts);
+    }, Math.random() * 1500);
+
+    signal?.addEventListener('abort', () => {
+      console.log('Aborting');
+      clearTimeout(timeoutId);
+
+      reject(new DOMException('Search aborted', 'AbortError'));
+    });
   });
-
-  return query !== ''
-    ? products.filter((product) =>
-        product.name.toLowerCase().includes(query.toLowerCase())
-      )
-    : products;
-}
+};
