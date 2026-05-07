@@ -10,7 +10,7 @@ export default function SearchBar({ onSearch }: Props) {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onSearch(query);
-    }, 300);
+    }, 0); // to make lag more obvious
 
     return () => clearTimeout(timeoutId);
   }, [query, onSearch]);

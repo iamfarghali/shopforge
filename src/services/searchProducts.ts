@@ -12,6 +12,15 @@ export const searchProducts: SearchProducts = (
 ) => {
   return new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
+      // simulate expensive operation
+      if (query !== '') {
+        for (let i = 0; i < 10000; i++) {
+          products.filter((product) =>
+            product.name.toLowerCase().includes(query.toLowerCase())
+          );
+        }
+      }
+
       const filteredProducts =
         query !== ''
           ? products.filter((product) =>
