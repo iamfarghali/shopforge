@@ -10,19 +10,25 @@ export default function SearchBar({ onSearch }: Props) {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onSearch(query);
-    }, 0); // to make lag more obvious
+    }, 300);
 
     return () => clearTimeout(timeoutId);
   }, [query, onSearch]);
 
   return (
-    <input
-      type="text"
-      name="product_name"
-      value={query}
-      className="border w-1/2 px-2"
-      placeholder="Search..."
-      onChange={(e) => setQuery(e.target.value)}
-    />
+    <div className="flex flex-col gap-1 w-full">
+      <label htmlFor="search" className="cursor-pointer font-semibold">
+        Search <span className="text-gray-400">via remote source</span>
+      </label>
+      <input
+        id="search"
+        type="text"
+        name="product_name"
+        value={query}
+        className="border w-full p-2"
+        placeholder="Search..."
+        onChange={(e) => setQuery(e.target.value)}
+      />
+    </div>
   );
 }
