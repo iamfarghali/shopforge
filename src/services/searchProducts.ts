@@ -12,14 +12,17 @@ export const searchProducts: SearchProducts = (
 ) => {
   return new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
-      // simulate expensive operation
-      if (query !== '') {
-        for (let i = 0; i < 10000; i++) {
-          products.filter((product) =>
-            product.name.toLowerCase().includes(query.toLowerCase())
-          );
-        }
-      }
+      /*
+        // simulate expensive operation
+        if (query !== '') {
+          for (let i = 0; i < 10000; i++) {
+              products.filter((product) =>
+                product.name.toLowerCase().includes(query.toLowerCase())
+              );
+            }
+          }
+        // This's misleading simulation because of `setTimeout` it runs outside React rendering.
+      */
 
       const filteredProducts =
         query !== ''
@@ -31,9 +34,7 @@ export const searchProducts: SearchProducts = (
     }, Math.random() * 1500);
 
     signal?.addEventListener('abort', () => {
-      console.log('Aborting');
       clearTimeout(timeoutId);
-
       reject(new DOMException('Search aborted', 'AbortError'));
     });
   });
