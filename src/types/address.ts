@@ -7,5 +7,8 @@ export type Address = {
   mainStreet: string;
   locationDescription: string;
   contactPhone: string;
-  mapLocation?: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
 };

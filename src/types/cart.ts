@@ -1,8 +1,9 @@
-import type { CartId, CartItemId, ProductId } from './brand';
+import type { CartId, CartItemId, CustomerId, ProductId } from './brand';
 import type { Money } from './product';
 
 export type Cart = {
   id: CartId;
+  customerId: CustomerId;
   items: CartItem[];
 };
 
